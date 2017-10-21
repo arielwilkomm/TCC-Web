@@ -27,11 +27,14 @@ public class ControleVenda implements Serializable{
     @EJB
     private VendaDAO<Venda> dao;
     @EJB
-    private VendaItensDAO<Venda> daoItens;
+    private VendaItensDAO<VendaItens> daoItens;
+    @EJB
+    private ProdutoDAO<Produtos> daoProdutos;
     private Venda objeto;
     private VendaItens objetoItens;
     private Boolean editando;
     private Boolean editandoItens;
+    private Produtos produtos;
     
     public ControleVenda() {
         editando = false;
@@ -106,9 +109,13 @@ public class ControleVenda implements Serializable{
         }
     }
     
-    public void salvarItens(){
+    public void salvarItens(Produtos p){
         try {
             if(objetoItens.getId() == null){
+                objetoItens.setProdutos(p);
+                objetoItens.setQuantidade(1);
+                objetoItens.setValorUnitario(p.getPreco());
+                objetoItens.setValorTotal(2.00);
                 daoItens.persist(objetoItens);
             } else {
                 daoItens.merge(objetoItens);
@@ -128,11 +135,11 @@ public class ControleVenda implements Serializable{
         this.dao = dao;
     }
 
-    public VendaItensDAO<Venda> getDaoItens() {
+    public VendaItensDAO<VendaItens> getDaoItens() {
         return daoItens;
     }
 
-    public void setDaoItens(VendaItensDAO<Venda> daoItens) {
+    public void setDaoItens(VendaItensDAO<VendaItens> daoItens) {
         this.daoItens = daoItens;
     }
 
@@ -166,6 +173,22 @@ public class ControleVenda implements Serializable{
 
     public void setEditandoItens(Boolean editandoItens) {
         this.editandoItens = editandoItens;
+    }
+
+    public ProdutoDAO<Produtos> getDaoProdutos() {
+        return daoProdutos;
+    }
+
+    public void setDaoProdutos(ProdutoDAO<Produtos> daoProdutos) {
+        this.daoProdutos = daoProdutos;
+    }
+
+    public Produtos getProdutos() {
+        return produtos;
+    }
+
+    public void setProdutos(Produtos produtos) {
+        this.produtos = produtos;
     }
 
 }

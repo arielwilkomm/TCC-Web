@@ -2,7 +2,7 @@
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
   <persistence-unit name="TCC-2017-2-WebPU" transaction-type="JTA">
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
-    <jta-data-source>java:app/jdbc/tcc-2017</jta-data-source>
+    <jta-data-source>jdbc/tcc-2017</jta-data-source>
     <class>br.edu.ifsul.modelo.Cidade</class>
     <class>br.edu.ifsul.modelo.Compra</class>
     <class>br.edu.ifsul.modelo.CompraItens</class>

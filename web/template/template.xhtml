@@ -13,10 +13,15 @@
                 <h:form id="formMenu">
                     <b:navBar brand="TA">
                         <b:navbarLinks>
-                            <b:navLink value="Início" outcome="inicio"/>
-                            <b:dropMenu value="Cadastros">
-                                <b:navCommandLink value="Estado" ajax="false" action="#{controleEstado.listar()}"/>
-                                <b:navCommandLink value="Cidade" ajax="false" action="#{controleCidade.listar()}"/>
+                            <b:navLink icon="home" value="Início" outcome="inicio"/>
+                            <b:dropMenu icon="cog" value="Cadastros">
+                                <b:navCommandLink icon="globe" value="Estado" ajax="false" action="#{controleEstado.listar()}"/>
+                                <b:navCommandLink icon="globe" value="Cidade" ajax="false" action="#{controleCidade.listar()}"/>
+                                <b:navCommandLink icon="envelope" value="Entrega" ajax="false" action="#{controleEntrega.listar()}"/>
+                                <b:navCommandLink icon="book" value="Produtos" ajax="false" action="#{controleProdutos.listar()}"/>
+                                <b:navCommandLink icon="user" value="Pessoas" ajax="false" action="#{controlePessoa.listar()}"/>
+                                <b:navCommandLink icon="credit-card" value="Vendas" ajax="false" action="#{controleVenda.listar()}"/>
+                                <b:navCommandLink icon="briefcase" value="Compras" ajax="false" action="#{controleCompra.listar()}"/>
                             </b:dropMenu>
                         </b:navbarLinks>
                     </b:navBar>

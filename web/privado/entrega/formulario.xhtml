@@ -5,31 +5,33 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:form id="formEdicao">
-        <h:panelGroup rendered="#{controleCidade.editando}">
+        <h:panelGroup rendered="#{controleEntrega.editando}">
             <div class="ui-fluid">
                 <p:messages/>
                 <p:panelGrid columns="2" columnClasses="ui-grid-col-2, ui-grid-col-20"
                              layout="grid" styleClass="ui-panelgrid-blank">
                     <f:facet name="header">
-                        <p:outputLabel value="Edição de Cidades"/>
+                        <p:outputLabel value="Edição de Entregas"/>
                     </f:facet>
                     <p:outputLabel for="txtID" value="ID"/>
-                    <p:inputText id="txtID" value="#{controleCidade.objeto.id}" readonly="true"
+                    <p:inputText id="txtID" value="#{controleEntrega.objeto.id}" readonly="true"
                                  size="10"/>
-                    <p:outputLabel for="txtNome" value="Nome"/>
-                    <p:inputText id="txtNome" value="#{controleCidade.objeto.nome}"
-                                 size="40" maxlength="40"
-                                 required="true"
-                                 placeholder="Obrigatório"/>
-                    <p:outputLabel for="txtEmail" value="Estado"/>
-                    <p:selectOneMenu id="txtEmail" value="#{controleCidade.objeto.estado}">
-                        <f:converter converterId="converterEstado"/>
+                    <p:outputLabel for="txtNascimento" value="Data"/>
+                    <p:calendar id="txtNascimento" 
+                                value="#{controleEntrega.objeto.data}"
+                                pattern="dd/MM/yyyy" mask="true"                              
+                                navigator="true" >
+                        <f:converter converterId="converterCalendar"/>
+                    </p:calendar>
+                    <p:outputLabel for="txtEmail" value="Cidade"/>
+                    <p:selectOneMenu id="txtEmail" value="#{controleEntrega.objeto.cidade}">
+                        <f:converter converterId="converterCidade"/>
                         <f:selectItem itemLabel="Selecione um registro" noSelectionOption="true"/>
-                        <f:selectItems value="#{controleCidade.estadoDAO.listaTodos}"
+                        <f:selectItems value="#{controleEntrega.cidadeDAO.listaTodos}"
                                        var="s" itemLabel="#{s.nome}"/>
                     </p:selectOneMenu> 
                     <p:commandButton value="Salvar" icon="ui-icon-disk"
-                                     actionListener="#{controleCidade.salvar()}"
+                                     actionListener="#{controleEntrega.salvar()}"
                                      update="formEdicao :formListagem"/>
                 </p:panelGrid>
             </div>

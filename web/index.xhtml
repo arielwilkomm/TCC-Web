@@ -10,16 +10,16 @@
         <ui:define name="conteudo">
             <p:messages/>
             <h:form>
-                <p:dataGrid var="prod" value="#{controleVenda.daoItens.listaObjetos}"
+                <p:dataGrid var="prod" value="#{controleVenda.daoProdutos.listaObjetos}"
                             columns="3" layout="grid" rows="8" paginator="true" id="produtos">
                     <p:panel style="text-align: center" header="#{prod.nome}">
                         <h:panelGrid columns="1" style="width: 100%">
                             <h:outputText value="#{prod.nome}"/>
-                            <h:outputText value="#{prod.valorUnitario}">
+                            <h:outputText value="#{prod.preco}">
                                 <f:convertNumber pattern="R$ 0.00"/>
                             </h:outputText>
                             <p:commandButton icon="ui-icon-cart" title="Adicionar ao Carrinho"
-                                             actionListener="#{controleVenda.objeto.itens}"
+                                             actionListener="#{controleVenda.salvarItens(prod)}"
                                              update=":formMenu :conteudo"
                                              process="@form"/>
                         </h:panelGrid>

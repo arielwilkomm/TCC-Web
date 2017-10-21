@@ -20,13 +20,11 @@
                     <p:inputText id="txtNome" value="#{controleEstado.objeto.nome}"
                                  size="40" maxlength="40"
                                  required="true"
-                                 requiredMessage="O nome deve ser informado"
                                  placeholder="Obrigatório"/>
                     <p:outputLabel for="txtEmail" value="UF"/>
                     <p:inputText id="txtEmail" value="#{controleEstado.objeto.uf}"
                                  size="2" maxlength="2"
                                  required="true"
-                                 requiredMessage="O email deve ser informado"
                                  placeholder="Obrigatório"/>
                     <p:commandButton value="Salvar" icon="ui-icon-disk"
                                      actionListener="#{controleEstado.salvar()}"

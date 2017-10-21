@@ -25,7 +25,7 @@
                           wrap-jdbc-objects="false">
         <property name="serverName" value="localhost"/>
         <property name="portNumber" value="5432"/>
-        <property name="databaseName" value="postgres"/>
+        <property name="databaseName" value="TCC-2017-2"/>
         <property name="User" value="postgres"/>
         <property name="Password" value="ariel"/>
         <property name="URL" value="jdbc:postgresql://localhost:5432/TCC-2017-2"/>
