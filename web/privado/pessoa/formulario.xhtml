@@ -8,32 +8,121 @@
         <h:panelGroup rendered="#{controlePessoa.editando}">
             <div class="ui-fluid">
                 <p:messages/>
-                <p:panelGrid columns="2" columnClasses="ui-grid-col-2, ui-grid-col-20"
+                <p:panelGrid columns="2" columnClasses="ui-grid-col-2, ui-grid-col-13"
                              layout="grid" styleClass="ui-panelgrid-blank">
                     <f:facet name="header">
                         <p:outputLabel value="Edição de Pessoas"/>
-                    </f:facet>
+                    </f:facet>                
+
                     <p:outputLabel for="txtID" value="ID"/>
                     <p:inputText id="txtID" value="#{controlePessoa.objeto.id}" readonly="true"
                                  size="10"/>
+
                     <p:outputLabel for="txtNome" value="Nome"/>
                     <p:inputText id="txtNome" value="#{controlePessoa.objeto.nome}"
-                                 size="40" maxlength="40"
-                                 required="true"
-                                 requiredMessage="O nome deve ser informado"
-                                 placeholder="Obrigatório"/>
-                    <p:outputLabel for="txtEmail" value="UF"/>
-                    <p:inputText id="txtEmail" value="#{controlePessoa.objeto.uf}"
-                                 size="2" maxlength="2"
-                                 required="true"
-                                 requiredMessage="O email deve ser informado"
-                                 placeholder="Obrigatório"/>
+                                 placeholder="Obrigatório"/>         
+
+                    <p:outputLabel for="cbxSetor" value="Cidade"/>
+                    <p:selectOneMenu id="cbxSetor" value="#{controlePessoa.objeto.cidade}">
+                        <f:selectItem itemLabel="Selecione um registro" noSelectionOption="true"/>
+                        <f:selectItems value="#{controlePessoa.daoCidade.listaTodos}"
+                                       var="s"
+                                       itemLabel="#{s.nome}"/>
+                        <f:converter converterId="converterCidade"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel for="txtNome2" value="CEP"/>
+                    <p:inputText id="txtNome2" value="#{controlePessoa.objeto.cep}"
+                                 placeholder="Obrigatório"/>         
+
+                    <p:outputLabel for="txtEndereco" value="Endereco"/>
+                    <p:inputText id="txtEndereco" value="#{controlePessoa.objeto.endreco}"
+                                 placeholder="Obrigatório"/>      
+
+                    <p:outputLabel for="txtBairro" value="Bairro"/>
+                    <p:inputText id="txtBairro" value="#{controlePessoa.objeto.bairro}"
+                                 placeholder="Obrigatório"/> 
+
+                    <p:outputLabel for="txtEmail" value="Email"/>
+                    <p:inputText id="txtEmail" value="#{controlePessoa.objeto.email}"
+                                 placeholder="Obrigatório"/>         
+
+                    <p:outputLabel for="txtSenha" value="Senha"/>
+                    <p:password id="txtSenha" value="#{controlePessoa.senhaC}"
+                                placeholder="Obrigatório"/>         
+
+                    <p:outputLabel for="txtSenha2" value="Confirme sua senha"/>
+                    <p:password id="txtSenha2" value="#{controlePessoa.objeto.senha}"
+                                placeholder="Obrigatório"/>         
+
+                    <p:outputLabel for="txtC" value="CNPJ"/>
+                    <p:inputText id="txtC" value="#{controlePessoa.objeto.cnpj}"
+                                 placeholder="Obrigatório"/>        
+
+                    <p:outputLabel value="Administrador" for="selectGestor"/>
+                    <p:selectBooleanCheckbox id="selectGestor" value="#{controlePessoa.objeto.administrador}"/>
+
+                    <p:outputLabel value=""/>
                     <p:commandButton value="Salvar" icon="ui-icon-disk"
                                      actionListener="#{controlePessoa.salvar()}"
-                                     update="formEdicao :formListagem"/>
+                                     update="formEdicao :formListagem"/> 
+
                 </p:panelGrid>
+
+                <h:panelGroup id="painelColaborador">
+                    <p:panelGrid columns="2" columnClasses="ui-grid-col-2, ui-grid-col-13"
+                                 layout="grid" styleClass="ui-panelgrid-blank"
+                                 rendered="#{controlePessoa.editandoTelefone}">
+                        <f:facet name="header">
+                            <p:outputLabel value="Edição de telefones"/>
+                        </f:facet>        
+                        <p:outputLabel for="txtCarga" value="Número"/>
+                        <p:inputNumber id="txtCarga" value="#{controlePessoa.telefone.numero}"
+                                       size="12" maxlength="12"
+                                       required="true" decimalPlaces="0" thousandSeparator=""/>   
+                        <p:commandButton value="Salvar item" icon="ui-icon-disk"
+                                         actionListener="#{controlePessoa.salvarTelefone()}"
+                                         update="@form"
+                                         id="btnSalvarColaborador"/>                         
+                    </p:panelGrid>                
+                </h:panelGroup>
+
             </div>
+
+
+            <h:panelGroup id="listagemColaborador">
+                <h:panelGroup rendered="#{!controlePessoa.editandoTelefone}">
+                    <p:commandButton value="Novo telefone" icon="ui-icon-plus"
+                                     actionListener="#{controlePessoa.novoTelefone()}"
+                                     update="listagemColaborador painelColaborador"
+                                     id="btnNovoColaborador"/>                    
+                    <p:dataTable value="#{controlePessoa.objeto.telefones}"
+                                 var="col" reflow="true"  rowIndexVar="idx">
+                        <f:facet name="header">
+                            <p:outputLabel value="Telefone"/>
+                        </f:facet>
+                        <p:column headerText="ID">
+                            <p:outputLabel value="#{col.id}"/>
+                        </p:column>
+                        <p:column headerText="Número">
+                            <p:outputLabel value="#{col.numero}"/>
+                        </p:column>               
+                        <p:column headerText="Ações">
+                            <div align="center">                          
+                                <p:commandButton icon="ui-icon-pencil"
+                                                 actionListener="#{controlePessoa.alterarTelefone(col.id)}"
+                                                 process="@this"
+                                                 update="@form"/> 
+                                <p:commandButton icon="ui-icon-trash"
+                                                 actionListener="#{controlePessoa.excluirTelefone(col.id)}"
+                                                 process="@this" update="@form"/>
+                            </div>
+                        </p:column>                     
+                    </p:dataTable>
+                </h:panelGroup> 
+            </h:panelGroup>
+
         </h:panelGroup>
-</h:form>
+    </h:form>
 </html>
 

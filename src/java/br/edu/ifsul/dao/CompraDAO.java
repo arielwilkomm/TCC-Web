@@ -5,6 +5,7 @@
  */
 package br.edu.ifsul.dao;
 
+import br.edu.ifsul.modelo.Compra;
 import br.edu.ifsul.modelo.Venda;
 import java.io.Serializable;
 import javax.ejb.Stateless;
@@ -14,20 +15,19 @@ import javax.ejb.Stateless;
  * @author 201413260217
  */
 @Stateless
-public class VendaDAO<T> extends DAOGenerico<Venda> implements Serializable{
+public class CompraDAO<T> extends DAOGenerico<Compra> implements Serializable{
 
-    public VendaDAO() {
+    public CompraDAO() {
         super();
-        super.classePersistente = Venda.class;
+        super.classePersistente = Compra.class;
     }
     
     @Override
-    public Venda getObjectById(Integer id) throws Exception {
-        Venda obj = (Venda) super.getEm().find(super.getClassePersistente(), id);
-        obj.getContasReceber().size();
+    public Compra getObjectById(Integer id) throws Exception {
+        Compra obj = (Compra) super.getEm().find(super.getClassePersistente(), id);
+        obj.getContasPagar().size();
         obj.getItens().size();
         return obj;
     } 
-    
     
 }

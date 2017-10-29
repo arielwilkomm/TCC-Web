@@ -5,16 +5,16 @@
  */
 package br.edu.ifsul.controle;
 
-import br.edu.ifsul.dao.ContasReceberDAO;
+import br.edu.ifsul.dao.ContasPagarDAO;
 import br.edu.ifsul.dao.PessoaDAO;
 import br.edu.ifsul.dao.ProdutoDAO;
-import br.edu.ifsul.dao.VendaDAO;
-import br.edu.ifsul.dao.VendaItensDAO;
-import br.edu.ifsul.modelo.ContasReceber;
+import br.edu.ifsul.dao.CompraDAO;
+import br.edu.ifsul.dao.CompraItensDAO;
+import br.edu.ifsul.modelo.ContasPagar;
 import br.edu.ifsul.modelo.Pessoa;
 import br.edu.ifsul.modelo.Produtos;
-import br.edu.ifsul.modelo.Venda;
-import br.edu.ifsul.modelo.VendaItens;
+import br.edu.ifsul.modelo.Compra;
+import br.edu.ifsul.modelo.CompraItens;
 import br.edu.ifsul.util.Util;
 import java.io.Serializable;
 import javax.ejb.EJB;
@@ -25,52 +25,52 @@ import javax.inject.Named;
  *
  * @author 201413260217
  */
-@Named(value = "controleVenda")
+@Named(value = "controleCompra")
 @SessionScoped
-public class ControleVenda implements Serializable{
+public class ControleCompra implements Serializable{
     @EJB
-    private VendaDAO<Venda> dao;
-    private Venda objeto;
+    private CompraDAO<Compra> dao;
+    private Compra objeto;
     private Boolean editando;
     @EJB
     private ProdutoDAO<Produtos> daoProdutos;
     @EJB
     private PessoaDAO<Pessoa> daoPessoa;
     @EJB
-    private VendaItensDAO<VendaItens> daoVendaItens;
-    private Boolean editandoVendaItens;
-    private Boolean novoVendaItens;
-    private VendaItens vendaItens;
+    private CompraItensDAO<CompraItens> daoCompraItens;
+    private Boolean editandoCompraItens;
+    private Boolean novoCompraItens;
+    private CompraItens compraItens;
     @EJB
-    private ContasReceberDAO<ContasReceber> daoContas;
+    private ContasPagarDAO<ContasPagar> daoContas;
     private Boolean editandoContas;
     private Boolean novoContas;
-    private ContasReceber contas;
+    private ContasPagar contas;
     
     
-    public ControleVenda() {
+    public ControleCompra() {
         editando = false;
-        editandoVendaItens=false;
+        editandoCompraItens=false;
         editandoContas=false;
     }
     
     public String listar(){
         editando = false;
-        return "/privado/venda/listar?faces-redirect=true";
+        return "/privado/compra/listar?faces-redirect=true";
     }
     
     public void novo(){
         editando = true;
-        editandoVendaItens=false;
+        editandoCompraItens=false;
         editandoContas=false;
-        objeto = new Venda();
+        objeto = new Compra();
     }
     
     public void alterar(Integer id){
         try {
             objeto = dao.getObjectById(id);
             editando = true;
-            editandoVendaItens=false;
+            editandoCompraItens=false;
             editandoContas=false;
         } catch (Exception e) {
             Util.mensagemErro("Erro ao recuperar o objeto: " + Util.getMensagemErro(e));
@@ -97,60 +97,60 @@ public class ControleVenda implements Serializable{
             }
             Util.mensagemInformacao("Objeto Persistido com sucesso");
             editando = false;
-            editandoVendaItens=false;
+            editandoCompraItens=false;
             editandoContas=false;
         } catch (Exception e) {
             Util.mensagemErro("Erro ao persistir objeto: " + Util.getMensagemErro(e));
         }
     }
     
-    public void novoVendaItens(){
-        editandoVendaItens = true;
-        novoVendaItens = true;
-        vendaItens = new VendaItens();
+    public void novoCompraItens(){
+        editandoCompraItens = true;
+        novoCompraItens = true;
+        compraItens = new CompraItens();
     }
     
     public void alterarItens(int index) {
-        vendaItens = objeto.getItens().get(index);
-        editandoVendaItens = true;
-        novoVendaItens = false;
+        compraItens = objeto.getItens().get(index);
+        editandoCompraItens = true;
+        novoCompraItens = false;
     }
     
-    public void excluirVendaItens(Integer id){
+    public void excluirCompraItens(Integer id){
         objeto.removerItens(id);
         Util.mensagemInformacao("Item removido com sucesso!");
     }
     
-    public void alterarVendaItens(Integer id){
-        vendaItens = objeto.getItens().get(id);
-        editandoVendaItens = true;
-        novoVendaItens = false;
+    public void alterarCompraItens(Integer id){
+        compraItens = objeto.getItens().get(id);
+        editandoCompraItens = true;
+        novoCompraItens = false;
     }
     
-    public void salvarVendaItens(){
-        if (vendaItens.getId() == null) {
-            vendaItens.setValorTotal(vendaItens.getValorUnitario()*vendaItens.getQuantidade());
-            objeto.setValor(vendaItens.getValorTotal());
+    public void salvarCompraItens(){
+        if (compraItens.getId() == null) {
+            compraItens.setValorTotal(compraItens.getValorUnitario()*compraItens.getQuantidade());
+            objeto.setValor(compraItens.getValorTotal());
             novoContas();
             contas.setData(objeto.getData());
-            contas.setTotal(vendaItens.getValorTotal());
+            contas.setTotal(compraItens.getValorTotal());
             salvarContas();
-            if (novoVendaItens) {
-                objeto.adicionarItens(vendaItens);
+            if (novoCompraItens) {
+                objeto.adicionarItens(compraItens);
             }
         }
-        editandoVendaItens = false;
+        editandoCompraItens = false;
         Util.mensagemInformacao("Item persistido com sucesso!");
     }
     
     public void novoContas(){
         editandoContas = true;
         novoContas = true;
-        contas = new ContasReceber();
+        contas = new ContasPagar();
     }
     
     public void alterarContas(int index) {
-        contas = objeto.getContasReceber().get(index);
+        contas = objeto.getContasPagar().get(index);
         editandoContas = true;
         novoContas = false;
     }
@@ -161,7 +161,7 @@ public class ControleVenda implements Serializable{
     }
     
     public void alterarContas(Integer id){
-        contas = objeto.getContasReceber().get(id);
+        contas = objeto.getContasPagar().get(id);
         editandoContas = true;
         novoContas = false;
     }
@@ -177,19 +177,19 @@ public class ControleVenda implements Serializable{
         Util.mensagemInformacao("Item persistido com sucesso!");
     }
 
-    public VendaDAO<Venda> getDao() {
+    public CompraDAO<Compra> getDao() {
         return dao;
     }
 
-    public void setDao(VendaDAO<Venda> dao) {
+    public void setDao(CompraDAO<Compra> dao) {
         this.dao = dao;
     }
 
-    public Venda getObjeto() {
+    public Compra getObjeto() {
         return objeto;
     }
 
-    public void setObjeto(Venda objeto) {
+    public void setObjeto(Compra objeto) {
         this.objeto = objeto;
     }
 
@@ -217,43 +217,43 @@ public class ControleVenda implements Serializable{
         this.daoPessoa = daoPessoa;
     }
 
-    public VendaItensDAO<VendaItens> getDaoVendaItens() {
-        return daoVendaItens;
+    public CompraItensDAO<CompraItens> getDaoCompraItens() {
+        return daoCompraItens;
     }
 
-    public void setDaoVendaItens(VendaItensDAO<VendaItens> daoVendaItens) {
-        this.daoVendaItens = daoVendaItens;
+    public void setDaoCompraItens(CompraItensDAO<CompraItens> daoCompraItens) {
+        this.daoCompraItens = daoCompraItens;
     }
 
-    public Boolean getEditandoVendaItens() {
-        return editandoVendaItens;
+    public Boolean getEditandoCompraItens() {
+        return editandoCompraItens;
     }
 
-    public void setEditandoVendaItens(Boolean editandoVendaItens) {
-        this.editandoVendaItens = editandoVendaItens;
+    public void setEditandoCompraItens(Boolean editandoCompraItens) {
+        this.editandoCompraItens = editandoCompraItens;
     }
 
-    public Boolean getNovoVendaItens() {
-        return novoVendaItens;
+    public Boolean getNovoCompraItens() {
+        return novoCompraItens;
     }
 
-    public void setNovoVendaItens(Boolean novoVendaItens) {
-        this.novoVendaItens = novoVendaItens;
+    public void setNovoCompraItens(Boolean novoCompraItens) {
+        this.novoCompraItens = novoCompraItens;
     }
 
-    public VendaItens getVendaItens() {
-        return vendaItens;
+    public CompraItens getCompraItens() {
+        return compraItens;
     }
 
-    public void setVendaItens(VendaItens vendaItens) {
-        this.vendaItens = vendaItens;
+    public void setCompraItens(CompraItens compraItens) {
+        this.compraItens = compraItens;
     }
 
-    public ContasReceberDAO<ContasReceber> getDaoContas() {
+    public ContasPagarDAO<ContasPagar> getDaoContas() {
         return daoContas;
     }
 
-    public void setDaoContas(ContasReceberDAO<ContasReceber> daoContas) {
+    public void setDaoContas(ContasPagarDAO<ContasPagar> daoContas) {
         this.daoContas = daoContas;
     }
 
@@ -273,11 +273,11 @@ public class ControleVenda implements Serializable{
         this.novoContas = novoContas;
     }
 
-    public ContasReceber getContas() {
+    public ContasPagar getContas() {
         return contas;
     }
 
-    public void setContas(ContasReceber contas) {
+    public void setContas(ContasPagar contas) {
         this.contas = contas;
     }
     

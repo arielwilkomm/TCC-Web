@@ -5,35 +5,162 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:form id="formEdicao">
-        <h:panelGroup rendered="#{controlePessoa.editando}">
+        <h:panelGroup rendered="#{controleVenda.editando}">
             <div class="ui-fluid">
                 <p:messages/>
-                <p:panelGrid columns="2" columnClasses="ui-grid-col-2, ui-grid-col-20"
+                <p:panelGrid columns="2" columnClasses="ui-grid-col-2, ui-grid-col-13"
                              layout="grid" styleClass="ui-panelgrid-blank">
                     <f:facet name="header">
-                        <p:outputLabel value="Edição de Pessoas"/>
-                    </f:facet>
-                    <p:outputLabel for="txtID" value="ID"/>
-                    <p:inputText id="txtID" value="#{controlePessoa.objeto.id}" readonly="true"
-                                 size="10"/>
-                    <p:outputLabel for="txtNome" value="Nome"/>
-                    <p:inputText id="txtNome" value="#{controlePessoa.objeto.nome}"
-                                 size="40" maxlength="40"
-                                 required="true"
-                                 requiredMessage="O nome deve ser informado"
-                                 placeholder="Obrigatório"/>
-                    <p:outputLabel for="txtEmail" value="UF"/>
-                    <p:inputText id="txtEmail" value="#{controlePessoa.objeto.uf}"
-                                 size="2" maxlength="2"
-                                 required="true"
-                                 requiredMessage="O email deve ser informado"
-                                 placeholder="Obrigatório"/>
+                        <p:outputLabel value="Edição de Vendas"/>
+                    </f:facet>                        
+                    <p:outputLabel for="txtNome" value="Valor"/>
+                    <p:inputText id="txtNome" value="#{controleVenda.objeto.valor}" readonly="true"/>                 
+                    <p:outputLabel for="txtInicio" value="Data"/>
+                    <p:calendar id="txtInicio" 
+                                value="#{controleVenda.objeto.data}"
+                                pattern="dd/MM/yyyy" mask="true"                              
+                                navigator="true" >
+                        <f:converter converterId="converterCalendar"/>
+                    </p:calendar>
+                    <p:outputLabel for="cbxSetor" value="Pessoa"/>
+                    <p:selectOneMenu id="cbxSetor" value="#{controleVenda.objeto.pessoa}">
+                        <f:selectItem itemLabel="Selecione um registro" noSelectionOption="true"/>
+                        <f:selectItems value="#{controleVenda.daoPessoa.listaTodos}"
+                                       var="s"
+                                       itemLabel="#{s.nome}"/>
+                        <f:converter converterId="converterPessoa"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel value=""/>
                     <p:commandButton value="Salvar" icon="ui-icon-disk"
-                                     actionListener="#{controlePessoa.salvar()}"
-                                     update="formEdicao :formListagem"/>
+                                     actionListener="#{controleVenda.salvar()}"
+                                     update="formEdicao :formListagem"/> 
+
                 </p:panelGrid>
+
+                <h:panelGroup id="painelColaborador">
+                    <p:panelGrid columns="2" columnClasses="ui-grid-col-2, ui-grid-col-13"
+                                 layout="grid" styleClass="ui-panelgrid-blank"
+                                 rendered="#{controleVenda.editandoVendaItens}">
+                        <f:facet name="header">
+                            <p:outputLabel value="Edição de itens"/>
+                        </f:facet>        
+                        <p:outputLabel for="cbxUsuario" value="Produtos"/>
+                        <p:selectOneMenu id="cbxUsuario" value="#{controleVenda.vendaItens.produtos}">
+                            <f:selectItem itemLabel="Selecione um registro" noSelectionOption="true"/>
+                            <f:selectItems value="#{controleVenda.daoProdutos.listaTodos}"
+                                           var="u"
+                                           itemLabel="#{u.nome}"/>
+                            <f:converter converterId="converterProdutos"/>
+                        </p:selectOneMenu>  
+                        <p:outputLabel for="txtCarga" value="Quantidade"/>
+                        <p:inputNumber id="txtCarga" value="#{controleVenda.vendaItens.quantidade}"
+                                       size="12" maxlength="12"
+                                       required="true" decimalPlaces="0" thousandSeparator=""/>       
+                        <p:outputLabel for="txtCarga2" value="Valor"/>
+                        <p:inputNumber id="txtCarga2" value="#{controleVenda.vendaItens.valorUnitario}"
+                                       size="12" maxlength="12"
+                                       required="true" decimalPlaces="0" thousandSeparator=""/>    
+                        <p:outputLabel value=""/>
+                        <p:commandButton value="Salvar item" icon="ui-icon-disk"
+                                         actionListener="#{controleVenda.salvarVendaItens()}"
+                                         update="@form"
+                                         id="btnSalvarColaborador"/>                         
+                    </p:panelGrid>                
+                </h:panelGroup>
+
+                <h:panelGroup id="painelConta">
+                    <p:panelGrid columns="2" columnClasses="ui-grid-col-2, ui-grid-col-13"
+                                 layout="grid" styleClass="ui-panelgrid-blank"
+                                 rendered="#{controleVenda.editandoContas}">
+                        <f:facet name="header">
+                            <p:outputLabel value="Edição de Contas a Receber"/>
+                        </f:facet>        
+                        <p:outputLabel for="txtNascimento" value="Data"/>
+                        <p:calendar id="txtNascimento" 
+                                    value="#{controleVenda.contas.data}"
+                                    pattern="dd/MM/yyyy" mask="true"                              
+                                    navigator="true" >
+                            <f:converter converterId="converterCalendar"/>
+                        </p:calendar>     
+                        <p:outputLabel value="Pago" for="selectGestor"/>
+                        <p:selectBooleanCheckbox id="selectGestor" value="#{controleVenda.contas.pago}"/>
+                        <p:commandButton value="Salvar conta" icon="ui-icon-disk"
+                                         actionListener="#{controleVenda.salvarContas()}"
+                                         update="@form"
+                                         id="btnSalvarConta"/>                         
+                    </p:panelGrid>                
+                </h:panelGroup>
+
             </div>
+
+            <br/>
+            <br/>
+            <h:panelGroup id="listagemColaborador">
+                <h:panelGroup rendered="#{!controleVenda.editandoVendaItens}">
+                    <p:commandButton value="Novo item" icon="ui-icon-plus"
+                                     actionListener="#{controleVenda.novoVendaItens()}"
+                                     update="listagemColaborador painelColaborador"
+                                     id="btnNovoColaborador"/>                    
+                    <p:dataTable value="#{controleVenda.objeto.itens}"
+                                 var="col" reflow="true"  rowIndexVar="idx">
+                        <f:facet name="header">
+                            <p:outputLabel value="Itens"/>
+                        </f:facet>
+                        <p:column headerText="Produto">
+                            <p:outputLabel value="#{col.produtos.nome}"/>
+                        </p:column>
+                        <p:column headerText="Quantidade">
+                            <p:outputLabel value="#{col.quantidade}"/>
+                        </p:column>               
+                        <p:column headerText="Valor">
+                            <p:outputLabel value="#{col.valorUnitario}"/>
+                        </p:column>               
+                        <p:column headerText="Ações">
+                            <div align="center">                          
+                                <p:commandButton icon="ui-icon-pencil"
+                                                 actionListener="#{controleVenda.alterarItens(id)}"
+                                                 process="@this"
+                                                 update="@form"/> 
+                                <p:commandButton icon="ui-icon-trash"
+                                                 actionListener="#{controleVenda.excluirVendaItens(id)}"
+                                                 process="@this" update="@form"/>
+                            </div>
+                        </p:column>                     
+                    </p:dataTable>
+                </h:panelGroup> 
+            </h:panelGroup>
+            <br/>
+            <br/>
+            <h:panelGroup id="listagemConta">
+                <h:panelGroup rendered="#{!controleVenda.editandoContas}">                 
+                    <p:dataTable value="#{controleVenda.objeto.contasReceber}"
+                                 var="col2" reflow="true"  rowIndexVar="idx">
+                        <f:facet name="header">
+                            <p:outputLabel value="Conta"/>
+                        </f:facet>
+                        <p:column headerText="Data">
+                            <p:outputLabel value="#{col2.data}">
+                                <f:converter converterId="converterCalendar"/>
+                            </p:outputLabel>
+                        </p:column>
+                        <p:column headerText="Total">
+                            <p:outputLabel value="#{col2.total}"/>
+                        </p:column>                   
+                        <p:column headerText="Ações">
+                            <div align="center">                          
+                                <p:commandButton icon="ui-icon-pencil"
+                                                 actionListener="#{controleVenda.alterarContas(id)}"
+                                                 process="@this"
+                                                 update="@form"/> 
+                                <p:commandButton icon="ui-icon-trash"
+                                                 actionListener="#{controleVenda.excluirContas(id)}"
+                                                 process="@this" update="@form"/>
+                            </div>
+                        </p:column>                     
+                    </p:dataTable>
+                </h:panelGroup> 
+            </h:panelGroup>
         </h:panelGroup>
-</h:form>
+    </h:form>
 </html>
 

@@ -25,8 +25,8 @@
                                     <p:outputLabel value="Ordem: "/>
                                     <p:selectOneMenu value="#{controlePessoa.dao.ordem}">
                                         <f:selectItem itemLabel="ID" itemValue="id"/>
-                                        <f:selectItem itemLabel="Nome" itemValue="nome"/>
-                                        <f:selectItem itemLabel="UF" itemValue="uf"/>
+                                        <f:selectItem itemLabel="Pessoa" itemValue="pessoa"/>
+                                        <f:selectItem itemLabel="Valor" itemValue="valor"/>
                                         <p:ajax update="listagem"/>
                                     </p:selectOneMenu>
                                     <p:outputLabel value="Filtro: "/>
@@ -57,8 +57,8 @@
                         <p:column headerText="Nome">
                             <p:outputLabel value="#{obj.nome}"/>
                         </p:column>
-                        <p:column headerText="UF">
-                            <p:outputLabel value="#{obj.uf}"/>
+                        <p:column headerText="Email">
+                            <p:outputLabel value="#{obj.email}"/>
                         </p:column>
                         <p:column headerText="Ações">
                             <div align="center">

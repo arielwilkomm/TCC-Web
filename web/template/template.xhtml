@@ -11,7 +11,7 @@
         <h:body>
             <b:container>
                 <h:form id="formMenu">
-                    <b:navBar brand="TA">
+                    <b:navBar brand="VD">
                         <b:navbarLinks>
                             <b:navLink icon="home" value="Início" outcome="inicio"/>
                             <b:dropMenu icon="cog" value="Cadastros">
@@ -21,7 +21,7 @@
                                 <b:navCommandLink icon="book" value="Produtos" ajax="false" action="#{controleProdutos.listar()}"/>
                                 <b:navCommandLink icon="user" value="Pessoas" ajax="false" action="#{controlePessoa.listar()}"/>
                                 <b:navCommandLink icon="credit-card" value="Vendas" ajax="false" action="#{controleVenda.listar()}"/>
-                                <b:navCommandLink icon="briefcase" value="Compras" ajax="false" action="#{controleCompra.listar()}"/>
+                                <b:navCommandLink icon="credit-card" value="Compra" ajax="false" action="#{controleCompra.listar()}"/>
                             </b:dropMenu>
                         </b:navbarLinks>
                     </b:navBar>
